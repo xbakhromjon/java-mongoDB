@@ -1,6 +1,6 @@
-package uz.bakhromjon;
+package uz.bakhromjon.user;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,32 +10,40 @@ import org.springframework.web.bind.annotation.*;
  * @since : 13/10/22, Thu, 15:22
  **/
 @RestController
+@RequestMapping("/user")
+@RequiredArgsConstructor
 public class UserController {
-    @Autowired
-    private UserService userService;
+
+    private final UserService service;
 
     @PostMapping
     public ResponseEntity<?> create(@RequestBody User user) {
-        return userService.create(user);
+        return service.create(user);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> get(@PathVariable String id) {
-        return userService.get(id);
+        return service.get(id);
     }
 
     @GetMapping()
     public ResponseEntity<?> getAll() {
-        return userService.getAll();
+        return service.getAll();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable String id) {
-        return userService.delete(id);
+        return service.delete(id);
     }
 
     @PatchMapping()
     public ResponseEntity<?> update(@RequestBody User user) {
-        return userService.update(user);
+        return service.update(user);
     }
+
+    @GetMapping("/byName/{name}")
+    public ResponseEntity<?> getByName(@PathVariable String name) {
+        return service.getByName(name);
+    }
+
 }

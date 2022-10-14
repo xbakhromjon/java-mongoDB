@@ -1,4 +1,4 @@
-package uz.bakhromjon;
+package uz.bakhromjon.passport;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,15 +10,15 @@ import org.springframework.data.mongodb.core.mapping.Document;
 /**
  * @author : Bakhromjon Khasanboyev
  * @username: @xbakhromjon
- * @since : 13/10/22, Thu, 15:17
+ * @since : 14/10/22, Fri, 13:52
  **/
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Document
-public class User {
+public class Passport {
     @Id
     private String ID;
-    private String name;
+    private String number;
 }

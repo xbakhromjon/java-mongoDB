@@ -1,13 +1,19 @@
-package uz.bakhromjon;
+package uz.bakhromjon.user;
 
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
+import uz.bakhromjon.user.User;
+
+import java.util.List;
 
 /**
  * @author : Bakhromjon Khasanboyev
@@ -15,7 +21,7 @@ import org.springframework.stereotype.Repository;
  * @since : 13/10/22, Thu, 21:31
  **/
 @Repository
-public class UserRepo2 {
+public class UserRepositoryWithMongoTemplate {
     @Autowired
     private MongoTemplate mongoTemplate;
 
@@ -74,6 +80,42 @@ public class UserRepo2 {
     public boolean remove(User user) {
         DeleteResult result = mongoTemplate.remove(user, "user");
         return result.getDeletedCount() != 0;
+    }
+
+    public List<User> find() {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("name").is("Eric"));
+        List<User> users = mongoTemplate.find(query, User.class, "user");
+        return users;
+    }
+
+    public List<User> findByRegex() {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("name").regex("^A"));
+        List<User> users = mongoTemplate.find(query, User.class);
+        return users;
+    }
+
+    public List<User> findByLtGt() {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("age").lt(50).gt(20));
+        List<User> users = mongoTemplate.find(query, User.class);
+        return users;
+    }
+
+    public List<User> findAndSort() {
+        Query query = new Query();
+        query.with(Sort.by(Sort.Direction.ASC, "age"));
+        List<User> users = mongoTemplate.find(query,User.class);
+        return users;
+    }
+
+    public List<User> findAndPageable() {
+        final Pageable pageableRequest = PageRequest.of(0, 2);
+        Query query = new Query();
+        query.with(pageableRequest);
+        List<User> users = mongoTemplate.find(query, User.class);
+        return users;
     }
 
 
